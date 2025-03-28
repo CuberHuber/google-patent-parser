@@ -4,3 +4,8 @@ data/
 data/**
 
 .env
+
+.idea
+.idea/**
+
+
