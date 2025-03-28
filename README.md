@@ -1,24 +1,40 @@
-# adeptus_patents
-![image](https://github.com/user-attachments/assets/6e46b1a8-e84a-4960-9bbe-0854945df6e9)
+# Adeptus Patents
+
+A Python project using UV for dependency management.
+
+## Purpose
+The main goal is to try to implement pure-oop on [Elegant Objects](https://www.elegantobjects.org/) into [a learning project](https://github.com/N0kr0s/adeptus_patents).
 
 
-Для работы далее по проекту (особенно учитывая, что мы все вместе должны суметь объяснить логику работы проекта) нужно будет изучить как минимум эти 2 основные библиотеки:
+## Installation
 
-  1) BeautifulSoup (bs4):
-   
-    https://www.youtube.com/watch?v=vtizH9w0V7c&t=289s&ab_channel=%D0%A5%D0%B0%D1%83%D0%B4%D0%B8%D0%A5%D0%BE%E2%84%A2-%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%BE%D0%BC%D0%B8%D1%80%D0%B5IT%21
-    https://www.youtube.com/watch?v=lOfm04oLD1U&ab_channel=PythonHubStudio
-    https://pypi.org/project/beautifulsoup4/
-    https://habr.com/ru/articles/544828/
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/CuberHuber/google-patent-parser
+    cd google-patent-parser
+    ```
 
-  2) Pandas:
-   
-    https://www.youtube.com/watch?v=-sJxwvx0P20&t=276s&ab_channel=AlexanderErshov
-    https://skillbox.ru/media/code/rabotaem-s-pandas-osnovnye-ponyatiya-i-realnye-dannye/
-    https://pandas.pydata.org/docs/
+2. Create and activate a virtual environment (recommended):
+    ```bash
+    uv venv  # Creates a virtual environment in .venv
+    source .venv/bin/activate  # On Unix/macOS
+    ```
 
-  3) Python dict:
-   
-    https://skillbox.ru/media/code/slovari-v-python-chto-nuzhno-znat-i-kak-polzovatsya/
+3. Install dependencies and initialize the project:
+    ```bash
+    make setup
+    ```
 
-Юзаем сайт https://patents.google.com/?language=SPANISH и вытаскиваем из него url-ки (result link), переходим по ним через request, парсим всю инфу с этих url-ок к нам в датасет и всё гг вп
+## Configuration
+1. A `data/` directory will be created automatically.
+2. The `.env` file is generated from `.env.sample` during setup. Update it with your configuration:
+    ```bash
+    nano .env
+    ```
+
+## Start Up
+1. Run the Application
+
+    ```bash
+    make run
+    ```
