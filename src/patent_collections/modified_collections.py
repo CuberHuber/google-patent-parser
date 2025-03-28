@@ -79,9 +79,9 @@ class WithExtendsColumn(ABCPatentCollection):
 
     def _patent(self, row: pd.Series) -> ABCPatent:
         patent = GooglePatent(
-            uri=row.to_dict().get('uri'),
-            row=row.to_dict(),
-            extends=GooglePatentExtends(
+            row.to_dict().get('uri'),
+            row.to_dict(),
+            GooglePatentExtends(
                 row.to_dict().get('uri')
             )
         ).with_extends()
