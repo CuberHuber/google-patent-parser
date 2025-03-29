@@ -5,7 +5,7 @@ from typing import override
 import requests
 import pandas as pd
 
-from decorators.retry import retry
+from aspects.retry import retry
 from .abc_patent_collection import ABCPatentCollection
 
 

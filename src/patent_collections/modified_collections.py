@@ -3,7 +3,7 @@ from typing import override
 import pandas as pd
 from tqdm import tqdm
 
-from decorators.only_once import only_once
+from aspects.cachable import Cachable
 from patents.abc_patent import ABCPatent
 from patents.extends.google_patent_extends import GooglePatentExtends
 from patents.google_patent import GooglePatent
@@ -18,7 +18,7 @@ class Limited(ABCPatentCollection):
         self._number = limit
 
     @override
-    @only_once
+    @Cachable
     def dataframe(self) -> pd.DataFrame:
         return self._df.head(self._number)
 
@@ -31,7 +31,7 @@ class WithNotNullField(ABCPatentCollection):
         self._key = key
 
     @override
-    @only_once
+    @Cachable
     def dataframe(self) -> pd.DataFrame:
         return self._df[self._df[self._key].notna()].copy(True)
 
@@ -44,7 +44,7 @@ class OnlyWithKeys(ABCPatentCollection):
         self._keys = keys
 
     @override
-    @only_once
+    @Cachable
     def dataframe(self) -> pd.DataFrame:
         return self._df[self._keys].copy(True)
 
@@ -69,7 +69,7 @@ class WithExtendsColumn(ABCPatentCollection):
         self._patents = patents
 
     @override
-    @only_once
+    @Cachable
     def dataframe(self) -> pd.DataFrame:
         result = []
         for _, row in tqdm(self._patents.dataframe().iterrows()):

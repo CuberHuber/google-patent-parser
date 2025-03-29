@@ -3,7 +3,7 @@ from typing import override
 import requests
 from bs4 import BeautifulSoup
 
-from decorators.only_once import only_once
+from aspects.cachable import Cachable
 from .abc_patent_extends import ABCPatentExtends
 
 
@@ -27,7 +27,7 @@ class GooglePatentExtends(ABCPatentExtends):
         self._uri = uri
 
     @override
-    @only_once
+    @Cachable
     def content(self) -> dict:
         """:returns patent meta data as dict type"""
         _out_dict = {}
