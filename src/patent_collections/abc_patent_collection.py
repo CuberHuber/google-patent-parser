@@ -3,7 +3,7 @@ from abc import ABCMeta
 import pandas as pd
 
 
-class ABCPatentCollection(metaclass=ABCMeta):
+class AbstractPatentCollection(metaclass=ABCMeta):
     _df: pd.DataFrame
 
     def dataframe(self) -> pd.DataFrame:

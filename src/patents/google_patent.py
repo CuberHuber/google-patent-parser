@@ -1,11 +1,11 @@
 from multipledispatch import dispatch
 
-from .abc_patent import ABCPatent
-from .extends.abc_patent_extends import ABCPatentExtends
+from .abc_patent import AbstractPatent
+from .extends.abc_patent_extends import AbstractPatentExtends
 from .extends.empty_patent_extends import EmptyGooglePatentExtends
 
 
-class GooglePatent(ABCPatent):
+class GooglePatent(AbstractPatent):
     """
 
     ---
@@ -33,8 +33,8 @@ class GooglePatent(ABCPatent):
 
     """
 
-    @dispatch(str, dict, ABCPatentExtends)
-    def __init__(self, uri: str, row: dict, extends: ABCPatentExtends):
+    @dispatch(str, dict, AbstractPatentExtends)
+    def __init__(self, uri: str, row: dict, extends: AbstractPatentExtends):
         # primary constructor
         assert row.get("uri") is not None and row.get("uri") == uri
         super().__init__(row)
@@ -54,7 +54,7 @@ class GooglePatent(ABCPatent):
         # secondary constructor
         self.__init__(uri, {'uri': uri}, EmptyGooglePatentExtends())
 
-    def with_extends(self) -> ABCPatent:
+    def with_extends(self) -> AbstractPatent:
         return GooglePatent(
             self._uri,
             {**self.data, **self._extends.content()},

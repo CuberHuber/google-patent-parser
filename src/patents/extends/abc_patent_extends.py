@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 
-class ABCPatentExtends(ABC):
+class AbstractPatentExtends(ABC):
     _uri: str
 
     def __dict__(self) -> dict:

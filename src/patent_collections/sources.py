@@ -6,10 +6,10 @@ import requests
 import pandas as pd
 
 from aspects.retry import retry
-from .abc_patent_collection import ABCPatentCollection
+from .abc_patent_collection import AbstractPatentCollection
 
 
-class PatentsFromString(ABCPatentCollection):
+class PatentsFromString(AbstractPatentCollection):
     _raw: str
 
     def __init__(self, raw: str, columns: list[str], skip_rows: int = 1):
@@ -18,7 +18,7 @@ class PatentsFromString(ABCPatentCollection):
         self._df.columns = columns
 
 
-class PatentsFromFile(ABCPatentCollection):
+class PatentsFromFile(AbstractPatentCollection):
 
     def __init__(self, path: str, columns: list[str], skip_rows: int = 1, encoding: str = 'utf-8'):
         self._path = path
@@ -28,7 +28,7 @@ class PatentsFromFile(ABCPatentCollection):
         self._df.columns = columns
 
 
-class PatentsFromGoogle(ABCPatentCollection):
+class PatentsFromGoogle(AbstractPatentCollection):
 
     def __init__(self, uri: str, skip_rows: int = 1):
         self._uri = uri
@@ -51,13 +51,13 @@ class PatentsFromGoogle(ABCPatentCollection):
 
 class PatentsFile:
 
-    def __init__(self, path: str, patents: ABCPatentCollection, force: bool | None = None):
-        if isinstance(path, str) and isinstance(patents, ABCPatentCollection) and isinstance(force, bool):
+    def __init__(self, path: str, patents: AbstractPatentCollection, force: bool | None = None):
+        if isinstance(path, str) and isinstance(patents, AbstractPatentCollection) and isinstance(force, bool):
             # Primary constructor
             assert Path(path).parent.is_dir()  # The Directory must exist. This Policy is subject to change
             self._path = path
             self._patents = patents
-        elif isinstance(path, str) and isinstance(patents, ABCPatentCollection) and force is None:
+        elif isinstance(path, str) and isinstance(patents, AbstractPatentCollection) and force is None:
             # secondary constructor call primary
             self.__init__(
                 path=path,

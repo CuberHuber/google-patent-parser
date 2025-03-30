@@ -3,7 +3,7 @@ from collections import UserDict
 from typing import override, Any
 
 
-class ABCPatent(ABC, UserDict):
+class AbstractPatent(ABC, UserDict):
     _uri: str
 
     @override

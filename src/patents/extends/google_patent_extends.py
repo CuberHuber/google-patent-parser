@@ -4,10 +4,10 @@ import requests
 from bs4 import BeautifulSoup
 
 from aspects.cachable import Cachable
-from .abc_patent_extends import ABCPatentExtends
+from .abc_patent_extends import AbstractPatentExtends
 
 
-class GooglePatentExtends(ABCPatentExtends):
+class GooglePatentExtends(AbstractPatentExtends):
     """
     Структура:
     :abstract: Аннотация патента (на странице патента). Должна содержать только текст (тело) аннотации.

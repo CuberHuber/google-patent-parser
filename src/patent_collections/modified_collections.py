@@ -4,15 +4,15 @@ import pandas as pd
 from tqdm import tqdm
 
 from aspects.cachable import Cachable
-from patents.abc_patent import ABCPatent
+from patents.abc_patent import AbstractPatent
 from patents.extends.google_patent_extends import GooglePatentExtends
 from patents.google_patent import GooglePatent
-from .abc_patent_collection import ABCPatentCollection
+from .abc_patent_collection import AbstractPatentCollection
 
 
-class Limited(ABCPatentCollection):
+class Limited(AbstractPatentCollection):
 
-    def __init__(self, patents: ABCPatentCollection, limit: int):
+    def __init__(self, patents: AbstractPatentCollection, limit: int):
         self._df = patents.dataframe()
         self._patents = patents
         self._number = limit
@@ -23,9 +23,9 @@ class Limited(ABCPatentCollection):
         return self._df.head(self._number)
 
 
-class WithNotNullField(ABCPatentCollection):
+class WithNotNullField(AbstractPatentCollection):
 
-    def __init__(self, patents: ABCPatentCollection, key: str):
+    def __init__(self, patents: AbstractPatentCollection, key: str):
         self._df = patents.dataframe()
         self._patents = patents
         self._key = key
@@ -36,9 +36,9 @@ class WithNotNullField(ABCPatentCollection):
         return self._df[self._df[self._key].notna()].copy(True)
 
 
-class OnlyWithKeys(ABCPatentCollection):
+class OnlyWithKeys(AbstractPatentCollection):
 
-    def __init__(self, patents: ABCPatentCollection, keys: list[str]):
+    def __init__(self, patents: AbstractPatentCollection, keys: list[str]):
         self._patents = patents
         self._df = patents.dataframe()
         self._keys = keys
@@ -49,9 +49,9 @@ class OnlyWithKeys(ABCPatentCollection):
         return self._df[self._keys].copy(True)
 
 
-class WithRenamedColumn(ABCPatentCollection):
+class WithRenamedColumn(AbstractPatentCollection):
 
-    def __init__(self, patents: ABCPatentCollection, old: str, new: str):
+    def __init__(self, patents: AbstractPatentCollection, old: str, new: str):
         self._patents = patents
         self._old = old
         self._new = new
@@ -62,9 +62,9 @@ class WithRenamedColumn(ABCPatentCollection):
         )
 
 
-class WithExtendsColumn(ABCPatentCollection):
+class WithExtendsColumn(AbstractPatentCollection):
 
-    def __init__(self, patents: ABCPatentCollection):
+    def __init__(self, patents: AbstractPatentCollection):
         # Primary constructor
         self._patents = patents
 
@@ -77,7 +77,7 @@ class WithExtendsColumn(ABCPatentCollection):
             result.append(patent)
         return pd.DataFrame(result)
 
-    def _patent(self, row: pd.Series) -> ABCPatent:
+    def _patent(self, row: pd.Series) -> AbstractPatent:
         patent = GooglePatent(
             row.to_dict().get('uri'),
             row.to_dict(),

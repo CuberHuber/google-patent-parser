@@ -1,9 +1,9 @@
 from typing import override, Any
 
-from .abc_patent_extends import ABCPatentExtends
+from .abc_patent_extends import AbstractPatentExtends
 
 
-class FakeGooglePatentExtends(ABCPatentExtends):
+class FakeGooglePatentExtends(AbstractPatentExtends):
 
     def __init__(self) -> None:
         self._uri = 'fake'
