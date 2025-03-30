@@ -5,7 +5,7 @@ from typing import override
 import requests
 import pandas as pd
 
-from aspects.retry import retry
+from aspects.retry import Retry
 from .abc_patent_collection import AbstractPatentCollection
 
 
@@ -35,7 +35,7 @@ class PatentsFromGoogle(AbstractPatentCollection):
         self._skip_rows = skip_rows
         self._df = pd.DataFrame()  # Empty DataFrame
 
-    @retry(times=3, delay=3)
+    @Retry(times=3, delay=3)
     def _content(self) -> bytes:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"

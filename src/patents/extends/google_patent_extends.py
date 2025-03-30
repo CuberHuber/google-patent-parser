@@ -27,7 +27,7 @@ class GooglePatentExtends(AbstractPatentExtends):
         self._uri = uri
 
     @override
-    @Cachable
+    @Cachable()
     def content(self) -> dict:
         """:returns patent meta data as dict type"""
         _out_dict = {}

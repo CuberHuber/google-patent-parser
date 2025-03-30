@@ -18,7 +18,7 @@ class Limited(AbstractPatentCollection):
         self._number = limit
 
     @override
-    @Cachable
+    @Cachable()
     def dataframe(self) -> pd.DataFrame:
         return self._df.head(self._number)
 
@@ -31,7 +31,7 @@ class WithNotNullField(AbstractPatentCollection):
         self._key = key
 
     @override
-    @Cachable
+    @Cachable()
     def dataframe(self) -> pd.DataFrame:
         return self._df[self._df[self._key].notna()].copy(True)
 
@@ -44,7 +44,7 @@ class OnlyWithKeys(AbstractPatentCollection):
         self._keys = keys
 
     @override
-    @Cachable
+    @Cachable()
     def dataframe(self) -> pd.DataFrame:
         return self._df[self._keys].copy(True)
 
@@ -69,7 +69,7 @@ class WithExtendsColumn(AbstractPatentCollection):
         self._patents = patents
 
     @override
-    @Cachable
+    @Cachable()
     def dataframe(self) -> pd.DataFrame:
         result = []
         for _, row in tqdm(self._patents.dataframe().iterrows()):
