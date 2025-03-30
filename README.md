@@ -1,10 +1,17 @@
 # Adeptus Patents
 
+[![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
+[![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
+
 A Python project using UV for dependency management.
 
 ## Purpose
 The main goal is to try to implement pure-oop on [Elegant Objects](https://www.elegantobjects.org/) into [a learning project](https://github.com/N0kr0s/adeptus_patents).
 
+## Features:
+   - EO principles
+   - A Parameterized decorator as a Class
+   - A Decorator pattern
 
 ## Installation
 
