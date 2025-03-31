@@ -11,7 +11,10 @@ The main goal is to try to implement pure-oop on [Elegant Objects](https://www.e
 ## Features:
    - EO principles
    - A Parameterized decorator as a Class
+   - Environment as an Object
+   - Multi-constructor (Only one primary constructor) through `multipledispatch.dispatch`
    - A Decorator pattern
+   - Nor `None` references
 
 ## Installation
 
