@@ -1,39 +1,74 @@
 from io import StringIO
-from pathlib import Path
 from typing import override
 
+from multipledispatch import dispatch
 import requests
 import pandas as pd
 
+from aspects.cachable import Cachable
 from aspects.retry import Retry
 from .abc_patent_collection import AbstractPatentCollection
 
 
-class PatentsFromString(AbstractPatentCollection):
+class PatentsInString(AbstractPatentCollection):
     _raw: str
 
-    def __init__(self, raw: str, columns: list[str], skip_rows: int = 1):
+    @dispatch(str, list, int)
+    def __init__(self, raw: str, columns: list[str], skip_rows: int):
         self._raw = raw
-        self._df = pd.read_csv(StringIO(self._raw), skiprows=skip_rows)
-        self._df.columns = columns
+        self._columns = columns
+        self._skip_rows = skip_rows
+        self._df = pd.DataFrame()
+
+    @dispatch(str, list)
+    def __init__(self, raw: str, columns: list[str]):
+        self.__init__(raw, columns, 0)
+
+    @override
+    @Cachable(True)
+    def dataframe(self) -> pd.DataFrame:
+        df = pd.read_csv(StringIO(self._raw), skiprows=self._skip_rows)
+        df.columns = self._columns
+        return df
 
 
-class PatentsFromFile(AbstractPatentCollection):
+class PatentsInFile(AbstractPatentCollection):
 
-    def __init__(self, path: str, columns: list[str], skip_rows: int = 1, encoding: str = 'utf-8'):
+    @dispatch(str, list, int, str)
+    def __init__(self, path: str, columns: list[str], skip_rows: int, encoding: str):
         self._path = path
-        with open(path, "rb") as f:
-            self._raw = f.read()
-        self._df = pd.read_csv(StringIO(self._raw.decode(encoding=encoding)), skiprows=skip_rows)
-        self._df.columns = columns
+        self._columns = columns
+        self._encoding = encoding
+        self._skip_rows = skip_rows
+
+    @dispatch(str, list, int)
+    def __init__(self, path: str, columns: list[str], skip_rows: int):
+        self.__init__(path, columns, skip_rows, 'utf-8')
+
+    @dispatch(str, list)
+    def __init__(self, path: str, columns: list[str]):
+        self.__init__(path, columns, 0)
+
+    @override
+    def dataframe(self) -> pd.DataFrame:
+        with open(self._path, "rb") as f:
+            _raw = f.read()
+            self._df = pd.read_csv(StringIO(_raw.decode(encoding=self._encoding)), skiprows=self._skip_rows)
+            self._df.columns = self._columns
+        return self._df
 
 
-class PatentsFromGoogle(AbstractPatentCollection):
+class PatentsInGoogle(AbstractPatentCollection):
 
-    def __init__(self, uri: str, skip_rows: int = 1):
+    @dispatch(str, int)
+    def __init__(self, uri: str, skip_rows: int):
         self._uri = uri
         self._skip_rows = skip_rows
-        self._df = pd.DataFrame()  # Empty DataFrame
+        self._df = pd.DataFrame()
+
+    @dispatch(str)
+    def __init(self, uri: str):
+        self.__init__(uri, 1)
 
     @Retry(times=3, delay=3)
     def _content(self) -> bytes:
@@ -47,25 +82,3 @@ class PatentsFromGoogle(AbstractPatentCollection):
     @override
     def dataframe(self) -> pd.DataFrame:
         return pd.read_csv(StringIO(self._content().decode()), skiprows=self._skip_rows)
-
-
-class PatentsFile:
-
-    def __init__(self, path: str, patents: AbstractPatentCollection, force: bool | None = None):
-        if isinstance(path, str) and isinstance(patents, AbstractPatentCollection) and isinstance(force, bool):
-            # Primary constructor
-            assert Path(path).parent.is_dir()  # The Directory must exist. This Policy is subject to change
-            self._path = path
-            self._patents = patents
-        elif isinstance(path, str) and isinstance(patents, AbstractPatentCollection) and force is None:
-            # secondary constructor call primary
-            self.__init__(
-                path=path,
-                patents=patents,
-                force=False  # default value
-            )
-        else:
-            raise AttributeError()
-
-    def save(self):
-        self._patents.dataframe().to_csv(self._path, index=False)
